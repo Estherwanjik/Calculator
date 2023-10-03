@@ -1,12 +1,11 @@
 
 const lastOperationScreen = document.getElementById('lastOperationScreen')
 const currentOperationScreen = document.getElementById('currentOperationScreen')
-// const calcKeys = document.querySelector('.all-buttons');
 const numberButtons = document.querySelectorAll('[data-number]')
 const operatorButtons = document.querySelectorAll('[data-operator]') 
 const equalsButton = document.getElementById('equalsBtn')
 const clearButton = document.getElementById('clearBtn')
-const allClearButton = document.getElementById('allClearBtn')
+const allClearButton = document.getElementById('allclearBtn')
 const decimalButton = document.getElementById('decimalBtn')
 
 let firstNumber = ''
@@ -17,9 +16,9 @@ let shouldResetScreen = false
 
 window.addEventListener('keydown', handleKeyboardInput)
 equalsButton.addEventListener('click', evaluate)
-//allClearButton.addEventListener('click', clear)
-//clearButton.addEventListener('click', deleteNumber)
 decimalButton.addEventListener('click', appendPoint)
+allClearButton.addEventListener('click', clear)
+clearButton.addEventListener('click', deleteNumber)
 
 numberButtons.forEach((button) =>
     button.addEventListener('click', () => appendNumber(button.textContent))
@@ -84,8 +83,8 @@ function handleKeyboardInput(e) {
     if (e.key >= 0 && e.key <= 9) appendNumber(e.key)
     if (e.key === '.') appendPoint()
     if (e.key === '=' || e.key === 'Enter') evaluate()
-    if (e.key === 'Backspace') clearNumber()
-    if (e.key === 'Escape') allClear()
+    if (e.key === 'Backspace') deleteNumber()
+    if (e.key === 'Escape') clear()
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/')
       setOperation(convertOperator(e.key))
 }

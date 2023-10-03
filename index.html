@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <section class="container-parent">
+        <div class="container_child">
+            <div class="calculator">
+                <div class="display">
+                    <div class="calculator-display">
+                        <div class="screen-last" id="lastOperationScreen"></div>
+                        <div class="screen-current" id="currentOperationScreen">0</div>
+                    </div>
+                </div>
+                <div class="all-buttons">
+                    <button class="btn" data-type="reset" id="allclear" >AC</button>
+					<button class="btn" data-type="backspace" id="clear" >C</button>
+					<button class="btn" onclick="this.blur();" data-operator>%</button>
+                    <button class="btn" onclick="this.blur();" data-operator>÷</button>
+
+                    <button class="btn" onclick="this.blur();" data-number>7</button>
+                    <button class="btn" onclick="this.blur();" data-number>8</button>
+                    <button class="btn" onclick="this.blur();" data-number>9</button>
+                    <button class="btn" onclick="this.blur();" data-operator>+</button>
+
+                    <button class="btn" onclick="this.blur();" data-number>4</button>
+                    <button class="btn" onclick="this.blur();" data-number>5</button>
+                    <button class="btn" onclick="this.blur();" data-number>6</button>
+                    <button class="btn" onclick="this.blur();" data-operator>-</button>
+
+                    <button class="btn" onclick="this.blur();" data-number>1</button>
+                    <button class="btn" onclick="this.blur();" data-number>2</button>
+                    <button class="btn" onclick="this.blur();" data-number>3</button>
+                    <button class="btn" onclick="this.blur();" data-operator>x</button>
+
+                    
+                    <button class="btn" onclick="this.blur();" data-number>0</button>
+                    <button class="btn" onclick="this.blur();" id="decimalBtn">.</button>
+                    <button class="equals" data-type="equal" id="equalsBtn" value="=" >&#61</button> 
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        Odin Project Curriculum
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

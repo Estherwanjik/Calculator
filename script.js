@@ -7,9 +7,10 @@ const equalsButton = document.getElementById('equalsBtn')
 const clearButton = document.getElementById('clearBtn')
 const allClearButton = document.getElementById('allclearBtn')
 const decimalButton = document.getElementById('decimalBtn')
+const remainderButton = document.getElementById('remainder')
 
-let firstNumber = ''
-let secondNumber = ''
+/* let firstNumber = ''
+let secondNumber = '' */
 let currentOperation = null
 let shouldResetScreen = false
 
@@ -17,6 +18,7 @@ let shouldResetScreen = false
 window.addEventListener('keydown', handleKeyboardInput)
 equalsButton.addEventListener('click', evaluate)
 decimalButton.addEventListener('click', appendPoint)
+remainderButton.addEventListener('click', appendPercentage)
 allClearButton.addEventListener('click', clear)
 clearButton.addEventListener('click', deleteNumber)
 
@@ -51,15 +53,25 @@ function appendPoint() {
     if (currentOperationScreen.textContent.includes('.')) return
     currentOperationScreen.textContent += '.'
 } 
+function appendPercentage() {
+    if (shouldResetScreen) resetScreen()
+    if (currentOperationScreen.textContent === '')
+      currentOperationScreen.textContent = '0'
+    if (currentOperationScreen.textContent.includes('%')) return
+    currentOperationScreen.textContent += '%'
+}
+
 function deleteNumber() {
     currentOperationScreen.textContent = currentOperationScreen.textContent
       .toString()
       .slice(0, -1)
 }
 function setOperation(operator) {
-    if (currentOperation !== null) evaluate()
+    if (currentOperation != null) evaluate()
     firstOperand = currentOperationScreen.textContent
+    console.log(firstOperand)
     currentOperation = operator
+    console.log(currentOperation)
     lastOperationScreen.textContent = `${firstOperand} ${currentOperation}`
     shouldResetScreen = true
 }
@@ -70,10 +82,27 @@ function evaluate() {
       return
     }
     secondOperand = currentOperationScreen.textContent
+    tempFirstOperand = firstOperand
+    tempSecondOperand = secondOperand
+    console.log(firstOperand)
+    console.log(secondOperand)
+    console.log(is_percentage(firstOperand))
+    if(is_percentage(firstOperand)== true) {
+        firstOperand=firstOperand.slice(0,-1)
+        console.log(firstOperand)
+        firstOperand=(parseFloat(firstOperand)/100)
+        console.log(firstOperand)
+    }
+    else if(is_percentage(secondOperand) == true){
+        secondOperand=secondOperand.slice(0,-1)
+        console.log(secondOperand)
+        secondOperand=(parseFloat(secondOperand)/100)
+        console.log(secondOperand)
+    }
     currentOperationScreen.textContent = roundResult(
       operate(currentOperation, firstOperand, secondOperand)
     )
-    lastOperationScreen.textContent = `${firstOperand} ${currentOperation} ${secondOperand} =`
+    lastOperationScreen.textContent = `${tempFirstOperand} ${currentOperation} ${tempSecondOperand} =`
     currentOperation = null
 }
 function roundResult(number) {
@@ -85,7 +114,7 @@ function handleKeyboardInput(e) {
     if (e.key === '=' || e.key === 'Enter') evaluate()
     if (e.key === 'Backspace') deleteNumber()
     if (e.key === 'Escape') clear()
-    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/')
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '%')
       setOperation(convertOperator(e.key))
 }
 function convertOperator(keyboardOperator) {
@@ -109,6 +138,10 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b
 }
+
+ function is_percentage(a) {
+    return a.endsWith('%')
+} 
 function operate(operator, a, b) {
     a = Number(a)
     b = Number(b)

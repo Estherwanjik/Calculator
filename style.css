@@ -25,29 +25,13 @@ html {
     margin-bottom: 2rem;
     min-height: 200px;
     padding: 10px;
-    box-shadow: #212121;
-	
-
+   box-shadow: #212121;
+    border-radius: .8rem;
 }
-/* .container__child {
-	max-width: 400px; 
-	width: 100%;
-    border-radius: 15px; 
-    background-color: aqua; 
-   
-} */
 
-/*  .calculator {
-	border-radius: 1rem;
-	box-shadow: 5px 5px 12px rgba(0,0,0,0.5);
-    width: 100%;
-   
-
-} */   
 .calculator .display {
     background: #212121;
-    /* background: aqua; */
-	padding: 1rem;
+	padding: 1.5rem;
 	border-top-right-radius: 1rem;
     border-top-left-radius: 1rem;
     width: 480px;
@@ -58,10 +42,9 @@ html {
 	border: 0px;
     background: darkolivegreen;
     border-radius: .8rem;
-    padding: .8rem;
-    box-shadow: inset 2px 3px 5px 0px rgba(0,0,0,0.7);
+    padding: 20px;
+    box-shadow: inset 3px 4px 6px 1px rgba(0,0,0,0.7);
     outline: none;
-   
 }
 
 .screen-current {
@@ -82,39 +65,62 @@ html {
 
 .calculator .buttons-flex {
     display: grid;
-    grid-template-columns: repeat(4, 2fr);
+    grid-template-columns: repeat(4, 1fr);
     height: 100%;
     grid-gap: 2.5rem;
     padding: 1rem;
     background: #212121;
     border-bottom-right-radius: 1rem;
     border-bottom-left-radius: 1rem;
+
 }
 
 .buttons-flex button {
     font-size: 1.325rem;
-    padding: 1rem 0;
+    padding: 1.1rem 0;
     font-weight: 700;
     background: #616161;
-    border: 0px solid transparent;
+    border: 1px solid transparent;
     outline: none;
     text-decoration: none;
-    border-radius: 4em;
-    box-shadow: 4px 5px 5px 0px rgba(0,0,0,0.5);
+    border-radius: 100%;
+    box-shadow: 6px 7px 7px 1px rgba(0,0,0,0.9);
     color: #DFDFDF;
     cursor: pointer;
-    transition: all .10s ease-in-out;
+    transition: all .15s ease-in-out;
+   
 }
-
-.buttons-flex button:hover {
-    background: rosybrown;
-	color: var(--white);
-	transform: translateY(-0.2rem);
-} 
 
 button.equals {
 	grid-column: 3 / 5;
 	border-radius: 3em;
+}
+button.equals:hover {
+    background-color: darkgreen;
+}
+button.decimal:hover,
+button.remainder:hover {
+    background-color: purple;
+}
+button.allClear:hover, 
+button.clear:hover {
+    background-color: red;
+}
+
+button.operators:hover {
+    background-color:  darkcyan;
+}
+button.digits:hover {
+    background-color: rosybrown;
+}
+button.equals:active,
+button.equals:active,
+button.allClear:active,
+button.operators:active,
+button.decimal:active,
+button.digits:active,
+button.clear:active {
+    transform: translateY(-0.2rem);
 }
 
 footer {

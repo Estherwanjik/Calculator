@@ -98,7 +98,7 @@ const calculator = document.querySelector('.calculator');
 let isEqualsPressed = false;
 let equation = 0; //separate variable to calculate equation in backend
 let checkForDecimal = ''; //to store each number and check if decimal is pressed
-//let checkForRemainder = '';
+let checkForRemainder = '';
 
 calcKeys.addEventListener('click', (event) => {
 
@@ -185,8 +185,10 @@ calcKeys.addEventListener('click', (event) => {
     if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
         if (type === 'backspace' && !isEqualsPressed) {
             currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
+
             equation = equation.substring(0, equation.length - 1);
-            checkForDecimal = checkForDecimal.substring(0, checkForDecimal.length - 1);
+            //checkForDecimal = checkForDecimal.substring(0, checkForDecimal.length - 1);
+            //checkForRemainder = checkForRemainder.substring(0, checkForRemainder.length - 1);
         } else {
             inputDisplay = '0';
             currentOperationScreen.textContent = inputDisplay;
@@ -194,23 +196,24 @@ calcKeys.addEventListener('click', (event) => {
             isEqualsPressed = false;
             equation = '';
             checkForDecimal = '';
+            checkForRemainder = '';
         }
 
     }
     if (type === 'remainder' && (previousKeyType === 'number' || inputDisplay === '0')
     && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
-    if (!checkForRemainder.includes('%')) {
-        currentOperationScreen.textContent = inputDisplay + keyValue;
-        equation = equation + key.value;
-        checkForRemainder = checkForRemainder + keyValue;
+        if (!checkForRemainder.includes('%')) {
+            currentOperationScreen.textContent = inputDisplay + keyValue;
+            equation = equation + key.value;
+            checkForRemainder = checkForRemainder + keyValue;
+        }
     }
-}
 
-if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
+/* if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
     if (type === 'backspace' && !isEqualsPressed) {
         currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
         equation = equation.substring(0, equation.length - 1);
-        checkForRemainder = checkForRemainder.substring(0, checkForRemainder.length - 1);
+        checkForRemainder = checkForRemainder.substring(0, checkForDecimal.length - 1);
     } else {
         inputDisplay = '0';
         currentOperationScreen.textContent = inputDisplay;
@@ -220,7 +223,7 @@ if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
         checkForRemainder = '';
     }
 
-}
+} */
     //Send equation for calculation after Equals To (=) is pressed
     if (type === 'equal') {
         // Perform a calculation

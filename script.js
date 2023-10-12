@@ -13,8 +13,6 @@ function handleEquation(equation) {
 	let operator;
 	let operatorIndex;
 	let result;
-    //let newCurrentOperationScreen = '';
-    //let action = '';
 
 	/*  
 		1. Perform calculations as per BODMAS Method
@@ -22,34 +20,31 @@ function handleEquation(equation) {
 		3. after calculation of 1st numbers replace them with result
 		4. use splice method
 
-	*/
-    //if (equation.includes('%')) {
-    //    console.log('was here')
-       /*  currentOperationScreen.textContent = inputDisplay + keyValue;
-        equation = equation + key.value;
-        checkForRemainder = checkForRemainder + keyValue;
-        firstNumber = (parseFloat(firstNumber)/100);
-        firstNumber = firstNumber.toString();
-        currentOperationScreen.textContent = firstNumber; */
-    //}   
+	*/ 
 	for (var i = 0; i < operators.length; i++) {
 		while (equation.includes(operators[i])) {
 			operatorIndex = equation.findIndex(item => item === operators[i])
 			firstNumber = equation[operatorIndex-1]
 			operator = equation[operatorIndex]
 			secondNumber = equation[operatorIndex+1]
-            if(firstNumber.includes('%')  ) {
-                firstNumber = (parseFloat(firstNumber)/100)
-                firstNumber = firstNumber.toString()
-            }else if(secondNumber.includes('%')) {
-                secondNumber = (parseFloat(secondNumber)/100)
-                secondNumber = secondNumber.toString()
+            console.log('firstNumber', firstNumber, typeof(firstNumber))
+            if( typeof(firstNumber) != 'number') {
+                if(firstNumber.includes('%')  ) {
+                    firstNumber = (parseFloat(firstNumber)/100)
+                    firstNumber = firstNumber.toString()
+                }
             }
-
+            if( typeof(secondNumber) != 'number') {
+                if(secondNumber.includes('%')) {
+                    secondNumber = (parseFloat(secondNumber)/100)
+                    secondNumber = secondNumber.toString()
+                }
+            }
             console.log('first number', firstNumber, 'operator', operator, 'secondNumber', secondNumber)
             result = calculate(firstNumber, operator, secondNumber)
 			equation.splice(operatorIndex - 1, 3, result)
 		}
+        
 	}
 
 	return result;
@@ -97,12 +92,11 @@ const displayLastOperationScreen = document.getElementById('lastOperationScreen'
 const calculator = document.querySelector('.calculator');
 let isEqualsPressed = false;
 let equation = 0; //separate variable to calculate equation in backend
-let checkForDecimal = ''; //to store each number and check if decimal is pressed
-let checkForRemainder = '';
+let checkForDecimal = ''; // storing each number and check if decimal is pressed
+let checkForRemainder = '';// storing each number and checking if remainder is pressed
 
 calcKeys.addEventListener('click', (event) => {
-
-	//Check if click is on the button and not on the container
+	//Checking if click is on the button and not on the container
 	if(!event.target.closest('button')) return;
 
 	const key = event.target;
@@ -133,7 +127,7 @@ calcKeys.addEventListener('click', (event) => {
 			equation = (previousKeyType === 'operator') ? equation + key.value : key.value;
 			checkForDecimal = checkForDecimal + keyValue;
 		}else {
-			//Check length so that number stays within display box
+			//Checking length so that number stays within display box
 			//else replace it with exponential
 			if (checkForDecimal.length >= 19) {
 				var replaceNumber = checkForDecimal;
@@ -145,7 +139,6 @@ calcKeys.addEventListener('click', (event) => {
 										currentOperationScreen.textContent.includes('I') ? 'Infinity' : inputDisplay + keyValue;
 				equation = equation + key.value;
 				checkForDecimal = checkForDecimal + keyValue;
-                //checkForRemainder = checkForRemainder + keyValue;
 
 			}
 		}
@@ -159,9 +152,8 @@ calcKeys.addEventListener('click', (event) => {
     if (type === 'operator' && previousKeyType !== 'operator'
     && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
         console.log("input:", inputDisplay, "keyval", keyValue, "equ", equation)
-    //calculator.dataset.firstNumber = checkForDecimal;
-    // calculator.dataset.operator = key.id;
     checkForDecimal = '';
+    checkForRemainder = '';
     currentOperationScreen.textContent = inputDisplay + ' ' + keyValue + ' ';
     equation = equation + ' ' + key.value + ' ';
 
@@ -173,20 +165,28 @@ calcKeys.addEventListener('click', (event) => {
         3. #2 required so that if user presses decimal after operator, it is not displayed
         4. check if the number already contains a decimal
     */
-    if (type === 'decimal' && (previousKeyType === 'number' || inputDisplay === '0')
+    if (type === 'decimal' && (previousKeyType === 'number' || inputDisplay === '0' || (previousKeyType === 'backspace'  && isDigit(inputDisplay.slice(-1)) && !findDecimal(inputDisplay))) 
         && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
-        if (!checkForDecimal.includes('.')) {
-            currentOperationScreen.textContent = inputDisplay + keyValue;
-            equation = equation + key.value;
-            checkForDecimal = checkForDecimal + keyValue;
+            //console.log(isDigit(inputDisplay.slice(-1)))
+            if (!checkForDecimal.includes('.')) {
+                currentOperationScreen.textContent = inputDisplay + keyValue;
+                equation = equation + key.value;
+                checkForDecimal = checkForDecimal + keyValue;
         }
     }
 
     if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
         if (type === 'backspace' && !isEqualsPressed) {
             currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
-
+            if(equation.endsWith('.')){
+                checkForDecimal = '';
+            }else if(equation.endsWith('%')){
+                console.log('i was here')
+                checkForRemainder = '';
+            }
+            //console.log('last character', lastCharacter, 'equation', equation)
             equation = equation.substring(0, equation.length - 1);
+            console.log('print equation', equation)
             //checkForDecimal = checkForDecimal.substring(0, checkForDecimal.length - 1);
             //checkForRemainder = checkForRemainder.substring(0, checkForRemainder.length - 1);
         } else {
@@ -200,7 +200,7 @@ calcKeys.addEventListener('click', (event) => {
         }
 
     }
-    if (type === 'remainder' && (previousKeyType === 'number' || inputDisplay === '0')
+    if (type === 'remainder' && (previousKeyType === 'number' || inputDisplay === '0'  || (previousKeyType === 'backspace'  && isDigit(inputDisplay.slice(-1))))
     && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
         if (!checkForRemainder.includes('%')) {
             currentOperationScreen.textContent = inputDisplay + keyValue;
@@ -209,7 +209,7 @@ calcKeys.addEventListener('click', (event) => {
         }
     }
 
-/* if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
+ /* if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
     if (type === 'backspace' && !isEqualsPressed) {
         currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
         equation = equation.substring(0, equation.length - 1);
@@ -236,7 +236,6 @@ calcKeys.addEventListener('click', (event) => {
         } else {
             displayLastOperationScreen.textContent = 'Math Error';
         }
-        //isEqualsPressed =false;
     }
     calculator.dataset.previousKeyType = type;
 })
@@ -252,9 +251,15 @@ function calculate(firstNumber, operator, secondNumber) {
     if (operator === 'minus' || operator === '-') return firstNumber - secondNumber;
     if (operator === 'multiply' || operator === 'x') return firstNumber * secondNumber;
     if (operator === 'divide' || operator === '/') return firstNumber / secondNumber;
-   // if (operator === 'remainder' || operator === '%') return firstNumber % secondNumber;
-
 }
-
-
-    
+//finding the last character
+function isDigit(character) {
+  const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']; 
+  return digits.includes(character)
+}
+//checking extra decimals
+function findDecimal(string) {
+    let items = string.split(' ')
+    last = items.pop()
+    return last.includes('.') 
+}

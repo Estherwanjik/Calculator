@@ -1,11 +1,5 @@
 
-
-
-
-
-
 function handleEquation(equation) {
-    console.log(equation)
     equation = equation.split(" ");
 	const operators = [['/', 'x'], ['+', '-']];
 	let firstNumber;
@@ -32,11 +26,9 @@ function handleEquation(equation) {
             } else {
                 operatorIndex = equation.findIndex(item => item === operators[i][1])
             }
-            //operatorIndex = equation.findIndex(item => item === operators[i])
 			firstNumber = equation[operatorIndex-1]
 			operator = equation[operatorIndex]
 			secondNumber = equation[operatorIndex+1]
-            console.log('firstNumber', firstNumber, typeof(firstNumber))
             if( typeof(firstNumber) != 'number') {
                 if(firstNumber.includes('%')  ) {
                     firstNumber = (parseFloat(firstNumber)/100)
@@ -49,7 +41,6 @@ function handleEquation(equation) {
                     secondNumber = secondNumber.toString()
                 }
             }
-            console.log('first number', firstNumber, 'operator', operator, 'secondNumber', secondNumber)
             result = calculate(firstNumber, operator, secondNumber)
 			equation.splice(operatorIndex - 1, 3, result)
 		}
@@ -57,7 +48,6 @@ function handleEquation(equation) {
 	}
 
 	return result;
-    //currentOperation = null
 } 
 
 // Event Listener for keyboard button press
@@ -93,8 +83,6 @@ document.addEventListener('keydown', (event) => {
 	}
 });
 
-
-
 const calcKeys = document.querySelector('.buttons-flex');
 const currentOperationScreen = document.getElementById('currentOperationScreen')
 const displayLastOperationScreen = document.getElementById('lastOperationScreen')
@@ -103,7 +91,6 @@ let isEqualsPressed = false;
 let equation = 0; //separate variable to calculate equation in backend
 let checkForDecimal = ''; // storing each number and check if decimal is pressed
 let checkForRemainder = '';// storing each number and checking if remainder is pressed
-//let checkForOperator = '';
 
 calcKeys.addEventListener('click', (event) => {
 	//Checking if click is on the button and not on the container
@@ -111,7 +98,6 @@ calcKeys.addEventListener('click', (event) => {
 
 	const key = event.target;
 	let keyValue = key.textContent;
-    console.log(keyValue)
     let inputDisplay = currentOperationScreen.textContent;
 	const { type } = key.dataset;
 	const { previousKeyType } = calculator.dataset;
@@ -121,8 +107,6 @@ calcKeys.addEventListener('click', (event) => {
         inputDisplay = displayLastOperationScreen.textContent;
         equation = displayLastOperationScreen.textContent;
         displayLastOperationScreen.innerHTML = '&nbsp;'
-
-
     }	
 	//If any number button is pressed
 	if(type === 'number' && !isEqualsPressed) {
@@ -137,8 +121,8 @@ calcKeys.addEventListener('click', (event) => {
 			equation = (previousKeyType === 'operator') ? equation + key.value : key.value;
 			checkForDecimal = checkForDecimal + keyValue;
 		}else {
-			//Checking length so that number stays within display box
-			//else replace it with exponential
+			/* Checking length so that number stays within display box
+			else replace it with exponential */
 			if (checkForDecimal.length >= 19) {
 				var replaceNumber = checkForDecimal;
 				checkForDecimal = Number(checkForDecimal).toExponential(2);
@@ -161,7 +145,6 @@ calcKeys.addEventListener('click', (event) => {
 	*/
     if (type === 'operator' && previousKeyType !== 'operator'
     && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
-        console.log("input:", inputDisplay, "keyval", keyValue, "equ", equation)
     checkForDecimal = '';
     checkForRemainder = '';
     currentOperationScreen.textContent = inputDisplay + ' ' + keyValue + ' ';
@@ -170,24 +153,21 @@ calcKeys.addEventListener('click', (event) => {
     }
 
     /*
-        1. Check if Decimal button is pressed AND Equals To (=) is not yet pressed
+        1. Checking if Decimal button is pressed AND Equals To (=) is not yet pressed
         2. AND was a previously pressed button a number or was display a 0
         3. #2 required so that if user presses decimal after operator, it is not displayed
         4. check if the number already contains a decimal
     */
     if (type === 'decimal' && (previousKeyType === 'number' || inputDisplay === '0' || (previousKeyType === 'backspace'  && isDigit(inputDisplay.slice(-1)) && !findDecimal(inputDisplay))) 
         && !isEqualsPressed && !inputDisplay.includes('Infinity')) {
-            //console.log(isDigit(inputDisplay.slice(-1)))
             if (!checkForDecimal.includes('.')) {
                 currentOperationScreen.textContent = inputDisplay + keyValue;
                 equation = equation + key.value;
                 checkForDecimal = checkForDecimal + keyValue;
         }
     }
-
     if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
         if (type === 'backspace' && !isEqualsPressed) {
-            //currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
             if(equation.endsWith('.')){
                 checkForDecimal = '';
             }else if(equation.endsWith('%')){
@@ -195,18 +175,12 @@ calcKeys.addEventListener('click', (event) => {
             }
             console.log('equation', equation)
             if (equation.endsWith(' ')) {
-                console.log('was here')
                 currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 3);
                 equation = equation.substring(0, equation.length - 3);
             } else {
                 currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
                 equation = equation.substring(0, equation.length - 1);
             }    
-            //if (equation.endsWith(' ')) equation = equation.substring(0, equation.length - 1);
-            //equation = equation.substring(0, equation.length - 1);
-
-            //checkForDecimal = checkForDecimal.substring(0, checkForDecimal.length - 1);
-            //checkForRemainder = checkForRemainder.substring(0, checkForRemainder.length - 1);
         } else {
             inputDisplay = '0';
             currentOperationScreen.textContent = inputDisplay;
@@ -227,13 +201,11 @@ calcKeys.addEventListener('click', (event) => {
         }
     }
 
- 
     //Send equation for calculation after Equals To (=) is pressed
     if (type === 'equal') {
         // Perform a calculation
         isEqualsPressed = true;
         const finalLastOperationScreen = handleEquation(equation);
-        
         if (finalLastOperationScreen || finalLastOperationScreen === 0) {
             displayLastOperationScreen.textContent = (!Number.isInteger(finalLastOperationScreen)) ? finalLastOperationScreen.toFixed(2) : 
                                         (finalLastOperationScreen.toString().length >= 16) ? finalLastOperationScreen.toExponential(2) : finalLastOperationScreen ;
@@ -243,7 +215,6 @@ calcKeys.addEventListener('click', (event) => {
     }
     calculator.dataset.previousKeyType = type;
 })
-
 
 //Function to calculate result based on each operator
 function calculate(firstNumber, operator, secondNumber) {

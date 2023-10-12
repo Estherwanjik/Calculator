@@ -28,13 +28,12 @@ html {
    box-shadow: #212121;
     border-radius: .8rem;
 }
-
 .calculator .display {
     background: #212121;
-	padding: 1.5rem;
-	border-top-right-radius: 1rem;
-    border-top-left-radius: 1rem;
-    width: 480px;
+	padding: 1.1rem;
+	border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+    width: 380px;
 } 
 
 .display .calculator-display {
@@ -67,17 +66,17 @@ html {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     height: 100%;
-    grid-gap: 2.5rem;
+    grid-gap: 2.0rem;
     padding: 1rem;
     background: #212121;
-    border-bottom-right-radius: 1rem;
-    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: 2rem;
 
 }
 
 .buttons-flex button {
     font-size: 1.325rem;
-    padding: 1.1rem 0;
+    padding: 0.5rem;
     font-weight: 700;
     background: #616161;
     border: 1px solid transparent;

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Dasar">
     <title>Calculator</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <section class="container-parent">
-            <div class="calculator">
-                <div class="display">
-                    <div class="calculator-display">
-                        <!-- <div class="screen-last" id="lastOperationScreen">&nbsp;</div> -->
-                        <div class="screen-current" id="currentOperationScreen">0</div>
-                        <div class="screen-last" id="lastOperationScreen">&nbsp;</div>
-                    </div>
+        <div class="calculator">
+            <div class="display">
+                <div class="calculator-display">
+                    <div class="screen-current" id="currentOperationScreen">0</div>
+                    <div class="screen-last" id="lastOperationScreen">&nbsp;</div>
+                </div>
                 </div>
                 <div class="buttons-flex">
                     <button class="allClear" onclick="this.blur();" id="allclearBtn" data-type="reset" >AC</button>
@@ -40,11 +40,12 @@
                     <button class="digits" data-type="number" id="digit-0" value="0" >0</button>
 					<button class="decimal" data-type="decimal" id="decimal" value="." >.</button>
 					<button class="equals" data-type="equal" id="equals" value="=" >&#61</button>
-                </div>
-            </div>
+                </div>    
+            </div>    
+        </div>
     </section>
     <footer>
-        Odin Project Curriculum
+        <p>Dasar &copy; <script>document.write( new Date().getFullYear() );</script></p>
     </footer>
     <script src="script.js"></script>
 </body>

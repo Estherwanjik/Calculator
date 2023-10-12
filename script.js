@@ -7,7 +7,7 @@
 function handleEquation(equation) {
     console.log(equation)
     equation = equation.split(" ");
-	const operators = ['/', 'x', '+', '-'];
+	const operators = [['/', 'x'], ['+', '-']];
 	let firstNumber;
 	let secondNumber;
 	let operator;
@@ -15,15 +15,24 @@ function handleEquation(equation) {
 	let result;
 
 	/*  
-		1. Perform calculations as per BODMAS Method
+		1. Perform calculations as per BO(DM)(AS) Method
 		2. For that use operators array
 		3. after calculation of 1st numbers replace them with result
 		4. use splice method
 
 	*/ 
 	for (var i = 0; i < operators.length; i++) {
-		while (equation.includes(operators[i])) {
-			operatorIndex = equation.findIndex(item => item === operators[i])
+		while (equation.includes(operators[i][0]) || equation.includes(operators[i][1])) {
+			if(equation.includes(operators[i][0]) && equation.includes(operators[i][1])) {
+                let operatorIndex_1 = equation.findIndex(item => item === operators[i][0])
+                let operatorIndex_2 = equation.findIndex(item => item === operators[i][1])
+                operatorIndex = Math.min(operatorIndex_1, operatorIndex_2)
+            } else if (equation.includes(operators[i][0])) {
+                operatorIndex = equation.findIndex(item => item === operators[i][0])
+            } else {
+                operatorIndex = equation.findIndex(item => item === operators[i][1])
+            }
+            //operatorIndex = equation.findIndex(item => item === operators[i])
 			firstNumber = equation[operatorIndex-1]
 			operator = equation[operatorIndex]
 			secondNumber = equation[operatorIndex+1]
@@ -94,6 +103,7 @@ let isEqualsPressed = false;
 let equation = 0; //separate variable to calculate equation in backend
 let checkForDecimal = ''; // storing each number and check if decimal is pressed
 let checkForRemainder = '';// storing each number and checking if remainder is pressed
+//let checkForOperator = '';
 
 calcKeys.addEventListener('click', (event) => {
 	//Checking if click is on the button and not on the container
@@ -177,16 +187,24 @@ calcKeys.addEventListener('click', (event) => {
 
     if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
         if (type === 'backspace' && !isEqualsPressed) {
-            currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
+            //currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
             if(equation.endsWith('.')){
                 checkForDecimal = '';
             }else if(equation.endsWith('%')){
-                console.log('i was here')
                 checkForRemainder = '';
             }
-            //console.log('last character', lastCharacter, 'equation', equation)
-            equation = equation.substring(0, equation.length - 1);
-            console.log('print equation', equation)
+            console.log('equation', equation)
+            if (equation.endsWith(' ')) {
+                console.log('was here')
+                currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 3);
+                equation = equation.substring(0, equation.length - 3);
+            } else {
+                currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
+                equation = equation.substring(0, equation.length - 1);
+            }    
+            //if (equation.endsWith(' ')) equation = equation.substring(0, equation.length - 1);
+            //equation = equation.substring(0, equation.length - 1);
+
             //checkForDecimal = checkForDecimal.substring(0, checkForDecimal.length - 1);
             //checkForRemainder = checkForRemainder.substring(0, checkForRemainder.length - 1);
         } else {
@@ -209,21 +227,7 @@ calcKeys.addEventListener('click', (event) => {
         }
     }
 
- /* if ((type === 'backspace' || type === 'reset') && inputDisplay !== '0') {
-    if (type === 'backspace' && !isEqualsPressed) {
-        currentOperationScreen.textContent = inputDisplay.substring(0, inputDisplay.length - 1);
-        equation = equation.substring(0, equation.length - 1);
-        checkForRemainder = checkForRemainder.substring(0, checkForDecimal.length - 1);
-    } else {
-        inputDisplay = '0';
-        currentOperationScreen.textContent = inputDisplay;
-        displayLastOperationScreen.innerHTML = '&nbsp;';
-        isEqualsPressed = false;
-        equation = '';
-        checkForRemainder = '';
-    }
-
-} */
+ 
     //Send equation for calculation after Equals To (=) is pressed
     if (type === 'equal') {
         // Perform a calculation
